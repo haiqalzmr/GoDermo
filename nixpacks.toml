@@ -1,4 +1,4 @@
 [phases.setup]
 cmds = [
-  "apt-get update && apt-get install -y libgl1 libgl1-mesa-glx libglx-mesa0 libglib2.0-0 libxrender1 libxext6 libsm6"
+  "apt-get update && apt-get install -y libgl1 mesa-utils libglib2.0-0 libxrender1 libxext6 libsm6"
 ]
