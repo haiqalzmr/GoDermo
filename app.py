@@ -61,10 +61,7 @@ os.makedirs(REPORT_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
-    if 'user_id' not in session:
-        flash("Please log in to continue.", "warning")
-        return redirect(url_for('auth.login'))
-    return render_template('index.html')
+    return "Healthcheck passed!"
 
 
 @app.route('/predict', methods=['POST'])
