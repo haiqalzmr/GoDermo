@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoDermo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div id="flash-banner" class="flash-banner">
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="GoDermo Logo" />
+      </div>
+      <div class="welcome-text">
+        <h3>WELCOME TO<br>GO DERMO !</h3>
+        <p>Skin Lesion Detection and Classification empowered by AI</p>
+      </div>
+      <div class="slogan">TOGETHER,<br>WE CAN<br>CHECK YOUR<br>SKIN LESION !</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="centered-content">
+        <div class="navbar-row">
+          <div class="top-nav dark-bar">
+            <div class="nav-left">
+              <a href="{{ url_for('index') }}" class="nav-button">Dashboard</a>
+              <a href="{{ url_for('history') }}" class="nav-button">Results History</a>
+            </div>
+            <div class="nav-right">
+              <span class="user-label">Hi, {{ session['user_name'] }} 👋</span>
+              <a href="{{ url_for('auth.logout') }}" class="nav-button danger">Logout</a>
+            </div>
+          </div>
+          <a href="{{ url_for('profile') }}" class="nav-button icon-button settings-btn" title="Profile">
+            <i class="fas fa-cog"></i>
+          </a>
+        </div>
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const banner = document.getElementById('flash-banner');
+      if (banner) {
+        setTimeout(() => {
+          banner.classList.add('active');
+        }, 100);
+        setTimeout(() => {
+          banner.classList.remove('active');
+        }, 2600);
+        banner.addEventListener('click', () => {
+          banner.classList.remove('active');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

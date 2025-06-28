@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}GoDermo - Home{% endblock %}
+
+{% block content %}
+<!-- Upload Instructions Box -->
+<section class="upload-card">
+  <h2>HOW DOES IT WORK ?</h2>
+  <div class="steps">
+    <div class="step">
+      <i class="fa-solid fa-upload icon blue"></i>
+      <p>Upload Your Images</p>
+    </div>
+    <div class="step">
+      <i class="fa-solid fa-circle-check icon green"></i>
+      <p>Receives Prediction Results</p>
+    </div>
+    <div class="step">
+      <i class="fa-solid fa-clock-rotate-left icon yellow"></i>
+      <p>View Results History Anytime!</p>
+    </div>
+  </div>
+
+  <!-- Upload Button inside the card -->
+  <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+    <div id="drop-area" class="drop-area">
+      <p>Drag & Drop Image Here<br><span style="font-size:14px;">or Click To Select From Gallery</span></p>
+      <input type="file" name="image" id="fileElem" accept="image/*" required style="display:none;">
+    </div>
+    <button type="submit" class="upload-button">Upload Image</button>
+  </form>
+
+
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.upload-form');
+    const overlay = document.getElementById('loading-overlay');
+
+    if (form) {
+      form.addEventListener('submit', () => {
+        overlay.style.display = 'flex';
+      });
+    }
+  });
+
+  const dropArea = document.getElementById('drop-area');
+  const fileInput = document.getElementById('fileElem');
+  const uploadForm = document.getElementById('uploadForm');
+
+  // Highlight drop area on drag
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropArea.classList.add('dragover');
+    }, false);
+  });
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropArea.classList.remove('dragover');
+    }, false);
+  });
+
+  // Handle drop
+  dropArea.addEventListener('drop', e => {
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      fileInput.files = e.dataTransfer.files;
+      dropArea.classList.remove('dragover');
+      // Manually trigger change event so filename is shown
+      fileInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  // Click to open file dialog
+  dropArea.addEventListener('click', () => fileInput.click());
+
+  // Show file name after selection
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      dropArea.querySelector('p').textContent = "Selected: " + fileInput.files[0].name;
+    } else {
+      dropArea.querySelector('p').innerHTML = 'Drag & drop your image here<br><span style="font-size:14px;">or click to select</span>';
+    }
+  });
+
+  // Prevent form submit if no file
+  uploadForm.addEventListener('submit', function(e) {
+    if (!fileInput.files.length) {
+      e.preventDefault();
+      alert('Please select an image to upload.');
+    }
+  });
+</script>
+
+{% endblock %}

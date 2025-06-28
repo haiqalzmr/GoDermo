@@ -1,0 +1,34 @@
+# Ignore virtual environments
+venv/
+.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# Mac and Linux system files
+.DS_Store
+Thumbs.db
+
+
+# SQLite - no longer used
+*.db
+
+# Jupyter Notebooks and unused
+*.ipynb
+
+# Flask migrations (optional if regenerating every time)
+migrations/
+
+# Uploaded user content (keep folders, ignore contents)
+static/uploaded_images/*
+static/heatmaps/*
+static/reports/*
+
+# Optional: keep empty folders with .keep file
+!static/uploaded_images/.gitkeep
+!static/heatmaps/.gitkeep
+!static/reports/.gitkeep

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GoDermo - Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="page">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="GoDermo Logo">
+    </div>
+
+    <div class="signup-container">
+      <div class="form-header">LOGIN</div>
+      <form action="{{ url_for('auth.login') }}" method="post">
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Log in</button>
+        <p class="bottom-text">Don't have an account?</p>
+        <a href="{{ url_for('auth.signup') }}" class="button-link">Sign up</a>
+      </form>
+    </div>
+
+    <div class="slogan">
+      TOGETHER,<br>WE CAN<br>CHECK YOUR<br>SKIN LESION!
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="flash-banner" class="flash-banner">
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const banner = document.getElementById('flash-banner');
+      if (banner) {
+        // Slide in
+        setTimeout(() => {
+          banner.classList.add('active');
+        }, 100);
+        // Slide out after 2.5s
+        setTimeout(() => {
+          banner.classList.remove('active');
+        }, 2600);
+        // Allow click to dismiss immediately
+        banner.addEventListener('click', () => {
+          banner.classList.remove('active');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

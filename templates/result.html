@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}GoDermo - Result{% endblock %}
+
+{% block content %}
+<section class="result-card">
+  <!-- Split container -->
+  <div class="result-body">
+    <div class="result-text">
+      <h2>HERE’S THE RESULTS,</h2>
+      <p><strong>SKIN LESION TYPE:</strong>
+        <span class="{% if result == 'benign' %}benign{% else %}malignant{% endif %}">{{ result.upper() }}</span>
+      </p>
+      <p><strong>CONFIDENCE :</strong> {{ confidence }}%</p>
+    </div>
+
+    <div class="result-images">
+      <img src="{{ image_path }}" alt="Uploaded Image">
+      <img src="{{ heatmap_path }}" alt="GradCAM Heatmap">
+    </div>
+  </div>
+
+  <div class="report-button">
+    <a href="{{ report_path }}" class="report-link" download>Generate Report</a>
+  </div>
+</section>
+{% endblock %}

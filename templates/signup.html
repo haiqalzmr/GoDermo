@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GoDermo - Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="page">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="GoDermo Logo">
+    </div>
+
+    <!-- Signup Form Container -->
+    <div class="signup-container">
+        <div class="form-header">SIGN UP</div>
+
+        <form action="{{ url_for('auth.signup') }}" method="post">
+            <label>First Name:</label>
+            <input type="text" name="first_name" required><br>
+            <label>Last Name:</label>
+            <input type="text" name="last_name" required><br>
+            <label>Email:</label>
+            <input type="email" name="email" required><br>
+            <label>Password:</label>
+            <input type="password" name="password" required><br>
+            <label>Age:</label>
+            <input type="number" name="age" min="0" required><br>
+            <label>Gender:</label>
+            <select name="gender" required>
+                <option value="" disabled selected>Select your gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select><br>
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+        <div style="text-align:center; margin-top: 10px;">
+            <span style="color: #fff;">Already a User?</span><br>
+            <a href="{{ url_for('auth.login') }}" class="login-btn">Login</a>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </div>
+      <div class="slogan">
+    TOGETHER,<br>WE CAN<br>CHECK YOUR<br>SKIN LESION!
+  </div>
+</div>
+</body>
+</html>

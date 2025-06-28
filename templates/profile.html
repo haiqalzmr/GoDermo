@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="profile-horizontal-header-outer">
+      <div class="profile-horizontal-header">
+        <i class="fas fa-cog"></i> PROFILE SETTINGS
+      </div>
+    </div>
+    <div class="profile-horizontal-card">
+      <form method="POST" class="profile-horizontal-form no-auto-loading">
+        <div class="profile-horizontal-fields">
+          <div class="profile-horizontal-row">
+                  <h3>Current Details</h3>
+                  <ul>
+                    <li><b>First Name:</b> {{ user.first_name }}</li>
+                    <li><b>Last Name:</b> {{ user.last_name }}</li>
+                    <li><b>Email:</b> {{ user.email }}</li>
+                    <li><b>Age:</b> {{ user.age }}</li>
+                    <li><b>Gender:</b> {{ user.gender }}</li>
+                  </ul>
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name or '' }}" required>
+          </div>
+          <div class="profile-horizontal-row">
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name or '' }}" required>
+          </div>
+          <div class="profile-horizontal-row">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+          </div>
+          <div class="profile-horizontal-row">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" value="{{ user.age or '' }}">
+          </div>
+          <div class="profile-horizontal-row">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+              <option value="" disabled {% if not user.gender %}selected{% endif %}>Select your gender</option>
+              <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+              <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+              <option value="Prefer not to say" {% if user.gender == 'Prefer not to say' %}selected{% endif %}>Prefer not to say</option>
+            </select>
+          </div>
+          <div class="profile-horizontal-row">
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" placeholder="Leave blank to keep current password">
+          </div>
+        </div>
+        <button type="submit" class="profile-horizontal-btn">Update</button>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if message != 'Logged in successfully.' %}
+                <div class="popup-overlay" id="popupOverlay">
+                  <div class="popup-message {{ category }}">{{ message }}</div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </form>
+    </div>
+
+
+
+    <!-- Update Confirmation Modal -->
+    <div id="updateModal" class="modal">
+      <div class="modal-content">
+        <h3>New Details</h3>
+        <ul style="text-align:left;">
+          <li><b>First Name:</b> <span id="currentFirstName"></span></li>
+          <li><b>Last Name:</b> <span id="currentLastName"></span></li>
+          <li><b>Email:</b> <span id="currentEmail"></span></li>
+          <li><b>Age:</b> <span id="currentAge"></span></li>
+          <li><b>Gender:</b> <span id="currentGender"></span></li>
+        </ul>
+        <p>Are you sure you want to update your profile?</p>
+        <button type="button" class="modal-delete-btn" id="confirmUpdateBtn">Yes, Update</button>
+        <button type="button" class="modal-cancel-btn" onclick="closeUpdateModal()">Cancel</button>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const popup = document.getElementById('popupOverlay');
+        if (popup) {
+          setTimeout(() => {
+            popup.style.display = 'none';
+          }, 2000);
+          popup.addEventListener('click', () => {
+            popup.style.display = 'none';
+          });
+        }
+      });
+
+      // Profile update confirmation modal logic
+      const updateModal = document.getElementById('updateModal');
+      const confirmUpdateBtn = document.getElementById('confirmUpdateBtn');
+      const profileForm = document.querySelector('.profile-horizontal-form');
+
+      // Fill current details in modal
+      function fillCurrentDetails() {
+        document.getElementById('currentFirstName').textContent = document.getElementById('first_name').value;
+        document.getElementById('currentLastName').textContent = document.getElementById('last_name').value;
+        document.getElementById('currentEmail').textContent = document.getElementById('email').value;
+        document.getElementById('currentAge').textContent = document.getElementById('age').value;
+        document.getElementById('currentGender').textContent = document.getElementById('gender').value;
+      }
+
+      profileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        fillCurrentDetails();
+        updateModal.style.display = 'flex';
+      });
+
+      confirmUpdateBtn.onclick = function() {
+        updateModal.style.display = 'none';
+        // Show loading overlay before submitting
+        document.getElementById('loading-overlay').style.display = 'flex';
+        profileForm.submit();
+      };
+
+      function closeUpdateModal() {
+        updateModal.style.display = 'none';
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        if (event.target === updateModal) {
+          closeUpdateModal();
+        }
+      }
+    </script>
+    {% endblock %}
+</body>
+</html>
